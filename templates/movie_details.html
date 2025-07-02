@@ -1,0 +1,140 @@
+{% extends "base.html" %}
+
+{% block title %}{{ movie.title }} - MovieMax{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="movie-details">
+        <div class="movie-poster-large">
+            <img src="{{ movie.poster }}" alt="{{ movie.title }}">
+        </div>
+        
+        <div class="movie-info-detailed">
+            <h1 class="movie-title-large">{{ movie.title }}</h1>
+            
+            <div class="movie-meta-large">
+                <span class="genre">{{ movie.genre }}</span>
+                <span class="duration">{{ movie.duration }} min</span>
+                <span class="rating">{{ movie.rating }}</span>
+            </div>
+            
+            <p class="movie-description-full">{{ movie.description }}</p>
+            
+            <div class="showtimes-section">
+                <h3>Showtimes</h3>
+                <div class="showtimes-grid">
+                    {% for showtime in movie.showtimes %}
+                    <a href="{{ url_for('book_movie', movie_id=movie.id, showtime=showtime) }}" class="showtime-btn">
+                        {{ showtime }}
+                    </a>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .movie-details {
+        display: grid;
+        grid-template-columns: 1fr 2fr;
+        gap: 3rem;
+        margin-top: 2rem;
+    }
+    
+    .movie-poster-large {
+        position: sticky;
+        top: 100px;
+        height: fit-content;
+    }
+    
+    .movie-poster-large img {
+        width: 100%;
+        border-radius: 12px;
+        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5);
+    }
+    
+    .movie-title-large {
+        font-size: 2.5rem;
+        font-weight: bold;
+        margin-bottom: 1rem;
+        background: linear-gradient(45deg, #ffd700, #ffed4e);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+    }
+    
+    .movie-meta-large {
+        display: flex;
+        gap: 1rem;
+        margin-bottom: 2rem;
+        flex-wrap: wrap;
+    }
+    
+    .movie-meta-large span {
+        padding: 0.5rem 1rem;
+        border-radius: 25px;
+        background: rgba(255, 215, 0, 0.2);
+        color: #ffd700;
+        font-weight: 500;
+    }
+    
+    .movie-description-full {
+        font-size: 1.1rem;
+        line-height: 1.8;
+        color: #e0e0e0;
+        margin-bottom: 3rem;
+    }
+    
+    .showtimes-section h3 {
+        font-size: 1.5rem;
+        margin-bottom: 1.5rem;
+        color: #ffd700;
+    }
+    
+    .showtimes-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+        gap: 1rem;
+    }
+    
+    .showtime-btn {
+        display: block;
+        padding: 1rem;
+        background: rgba(255, 255, 255, 0.05);
+        color: #ffffff;
+        text-decoration: none;
+        border-radius: 8px;
+        text-align: center;
+        font-weight: 600;
+        transition: all 0.3s ease;
+        border: 2px solid rgba(255, 215, 0, 0.3);
+    }
+    
+    .showtime-btn:hover {
+        background: rgba(255, 215, 0, 0.1);
+        border-color: #ffd700;
+        transform: translateY(-2px);
+        color: #ffd700;
+    }
+    
+    @media (max-width: 768px) {
+        .movie-details {
+            grid-template-columns: 1fr;
+            gap: 2rem;
+        }
+        
+        .movie-poster-large {
+            position: static;
+        }
+        
+        .movie-title-large {
+            font-size: 2rem;
+        }
+        
+        .showtimes-grid {
+            grid-template-columns: repeat(2, 1fr);
+        }
+    }
+</style>
+{% endblock %}

@@ -1,0 +1,450 @@
+{% extends "base.html" %}
+
+{% block title %}Admin Panel - MovieMax{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="admin-header">
+        <h1>Admin Panel</h1>
+        <p>Manage movies and view bookings</p>
+    </div>
+    
+    <div class="admin-tabs">
+        <button class="tab-btn active" onclick="showTab('movies')">Movies</button>
+        <button class="tab-btn" onclick="showTab('bookings')">Bookings</button>
+        <button class="tab-btn" onclick="showTab('analytics')">Analytics</button>
+    </div>
+    
+    <div id="movies-tab" class="tab-content active">
+        <div class="section-header">
+            <h2>Movie Management</h2>
+            <button class="btn" onclick="showAddMovieForm()">Add New Movie</button>
+        </div>
+        
+        <div class="movies-table-container">
+            <table class="admin-table">
+                <thead>
+                    <tr>
+                        <th>Poster</th>
+                        <th>Title</th>
+                        <th>Genre</th>
+                        <th>Duration</th>
+                        <th>Rating</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for movie in movies %}
+                    <tr>
+                        <td><img src="{{ movie.poster }}" alt="{{ movie.title }}" class="table-poster"></td>
+                        <td class="movie-title-cell">{{ movie.title }}</td>
+                        <td>{{ movie.genre }}</td>
+                        <td>{{ movie.duration }} min</td>
+                        <td><span class="rating-badge">{{ movie.rating }}</span></td>
+                        <td>
+                            <button class="btn-small btn-edit" onclick="editMovie('{{ movie.id }}')">Edit</button>
+                            <button class="btn-small btn-delete" onclick="deleteMovie('{{ movie.id }}')">Delete</button>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+    
+    <div id="bookings-tab" class="tab-content">
+        <div class="section-header">
+            <h2>Recent Bookings</h2>
+            <div class="booking-stats">
+                <div class="stat-card">
+                    <h3>Today's Bookings</h3>
+                    <p class="stat-number">24</p>
+                </div>
+                <div class="stat-card">
+                    <h3>Total Revenue</h3>
+                    <p class="stat-number">$2,880</p>
+                </div>
+                <div class="stat-card">
+                    <h3>Occupancy Rate</h3>
+                    <p class="stat-number">78%</p>
+                </div>
+            </div>
+        </div>
+        
+        <div class="bookings-list">
+            <div class="booking-card">
+                <div class="booking-info">
+                    <h4>Avatar: The Way of Water</h4>
+                    <p>Customer: John Doe | Seats: A5, A6 | 2:00 PM</p>
+                    <span class="booking-id">ID: BK001234</span>
+                </div>
+                <div class="booking-status confirmed">Confirmed</div>
+            </div>
+            
+            <div class="booking-card">
+                <div class="booking-info">
+                    <h4>Top Gun: Maverick</h4>
+                    <p>Customer: Jane Smith | Seats: C8, C9, C10 | 7:00 PM</p>
+                    <span class="booking-id">ID: BK001235</span>
+                </div>
+                <div class="booking-status confirmed">Confirmed</div>
+            </div>
+        </div>
+    </div>
+    
+    <div id="analytics-tab" class="tab-content">
+        <div class="section-header">
+            <h2>Analytics Dashboard</h2>
+        </div>
+        
+        <div class="analytics-grid">
+            <div class="chart-container">
+                <h3>Popular Movies</h3>
+                <div class="chart-placeholder">
+                    <div class="bar-chart">
+                        <div class="bar" style="height: 80%">
+                            <span>Avatar</span>
+                            <span class="bar-value">156</span>
+                        </div>
+                        <div class="bar" style="height: 65%">
+                            <span>Top Gun</span>
+                            <span class="bar-value">128</span>
+                        </div>
+                        <div class="bar" style="height: 45%">
+                            <span>Black Panther</span>
+                            <span class="bar-value">89</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="chart-container">
+                <h3>Revenue Trend</h3>
+                <div class="chart-placeholder">
+                    <p>📈 Monthly revenue growth: +12%</p>
+                    <p>💰 Best performing day: Saturday</p>
+                    <p>🎬 Most popular time: 7:00 PM - 9:00 PM</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    function showTab(tabName) {
+        const tabs = document.querySelectorAll('.tab-content');
+        const buttons = document.querySelectorAll('.tab-btn');
+        
+        tabs.forEach(tab => tab.classList.remove('active'));
+        buttons.forEach(btn => btn.classList.remove('active'));
+        
+        document.getElementById(tabName + '-tab').classList.add('active');
+        event.target.classList.add('active');
+    }
+    
+    function showAddMovieForm() {
+        alert('Add Movie form would open here (integrate with your backend)');
+    }
+    
+    function editMovie(movieId) {
+        alert('Edit movie ' + movieId + ' (integrate with your backend)');
+    }
+    
+    function deleteMovie(movieId) {
+        if (confirm('Are you sure you want to delete this movie?')) {
+            alert('Delete movie ' + movieId + ' (integrate with your backend)');
+        }
+    }
+</script>
+
+<style>
+    .admin-header {
+        text-align: center;
+        margin-bottom: 2rem;
+    }
+    
+    .admin-header h1 {
+        font-size: 2.5rem;
+        color: #ffd700;
+        margin-bottom: 0.5rem;
+    }
+    
+    .admin-tabs {
+        display: flex;
+        gap: 1rem;
+        margin-bottom: 2rem;
+        border-bottom: 2px solid rgba(255, 215, 0, 0.2);
+    }
+    
+    .tab-btn {
+        padding: 1rem 2rem;
+        background: transparent;
+        color: #a0a0a0;
+        border: none;
+        cursor: pointer;
+        font-size: 1rem;
+        font-weight: 600;
+        border-bottom: 3px solid transparent;
+        transition: all 0.3s ease;
+    }
+    
+    .tab-btn.active,
+    .tab-btn:hover {
+        color: #ffd700;
+        border-bottom-color: #ffd700;
+    }
+    
+    .tab-content {
+        display: none;
+    }
+    
+    .tab-content.active {
+        display: block;
+    }
+    
+    .section-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 2rem;
+    }
+    
+    .section-header h2 {
+        color: #ffd700;
+        font-size: 1.8rem;
+    }
+    
+    .movies-table-container {
+        background: rgba(255, 255, 255, 0.05);
+        border-radius: 12px;
+        padding: 1.5rem;
+        overflow-x: auto;
+    }
+    
+    .admin-table {
+        width: 100%;
+        border-collapse: collapse;
+    }
+    
+    .admin-table th,
+    .admin-table td {
+        padding: 1rem;
+        text-align: left;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    }
+    
+    .admin-table th {
+        background: rgba(255, 215, 0, 0.1);
+        color: #ffd700;
+        font-weight: 600;
+    }
+    
+    .table-poster {
+        width: 60px;
+        height: 80px;
+        object-fit: cover;
+        border-radius: 8px;
+    }
+    
+    .movie-title-cell {
+        font-weight: 600;
+        color: #ffffff;
+    }
+    
+    .rating-badge {
+        background: rgba(255, 215, 0, 0.2);
+        color: #ffd700;
+        padding: 0.3rem 0.8rem;
+        border-radius: 20px;
+        font-size: 0.9rem;
+    }
+    
+    .btn-small {
+        padding: 0.5rem 1rem;
+        margin: 0 0.25rem;
+        border: none;
+        border-radius: 6px;
+        cursor: pointer;
+        font-size: 0.9rem;
+        font-weight: 500;
+        transition: all 0.3s ease;
+    }
+    
+    .btn-edit {
+        background: rgba(59, 130, 246, 0.2);
+        color: #60a5fa;
+        border: 1px solid rgba(59, 130, 246, 0.3);
+    }
+    
+    .btn-edit:hover {
+        background: rgba(59, 130, 246, 0.3);
+    }
+    
+    .btn-delete {
+        background: rgba(239, 68, 68, 0.2);
+        color: #fca5a5;
+        border: 1px solid rgba(239, 68, 68, 0.3);
+    }
+    
+    .btn-delete:hover {
+        background: rgba(239, 68, 68, 0.3);
+    }
+    
+    .booking-stats {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 1rem;
+        margin-bottom: 2rem;
+    }
+    
+    .stat-card {
+        background: rgba(255, 255, 255, 0.05);
+        padding: 1.5rem;
+        border-radius: 12px;
+        text-align: center;
+        border: 1px solid rgba(255, 215, 0, 0.2);
+    }
+    
+    .stat-card h3 {
+        color: #a0a0a0;
+        font-size: 0.9rem;
+        margin-bottom: 0.5rem;
+    }
+    
+    .stat-number {
+        font-size: 2rem;
+        font-weight: bold;
+        color: #ffd700;
+    }
+    
+    .bookings-list {
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+    }
+    
+    .booking-card {
+        background: rgba(255, 255, 255, 0.05);
+        padding: 1.5rem;
+        border-radius: 12px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        border: 1px solid rgba(255, 215, 0, 0.1);
+    }
+    
+    .booking-info h4 {
+        color: #ffffff;
+        margin-bottom: 0.5rem;
+    }
+    
+    .booking-info p {
+        color: #a0a0a0;
+        margin-bottom: 0.5rem;
+    }
+    
+    .booking-id {
+        font-size: 0.9rem;
+        color: #ffd700;
+        font-weight: 500;
+    }
+    
+    .booking-status {
+        padding: 0.5rem 1rem;
+        border-radius: 20px;
+        font-weight: 600;
+        font-size: 0.9rem;
+    }
+    
+    .booking-status.confirmed {
+        background: rgba(34, 197, 94, 0.2);
+        color: #86efac;
+        border: 1px solid rgba(34, 197, 94, 0.3);
+    }
+    
+    .analytics-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+        gap: 2rem;
+    }
+    
+    .chart-container {
+        background: rgba(255, 255, 255, 0.05);
+        padding: 2rem;
+        border-radius: 12px;
+        border: 1px solid rgba(255, 215, 0, 0.2);
+    }
+    
+    .chart-container h3 {
+        color: #ffd700;
+        margin-bottom: 1.5rem;
+        text-align: center;
+    }
+    
+    .bar-chart {
+        display: flex;
+        align-items: end;
+        justify-content: space-around;
+        height: 200px;
+        gap: 1rem;
+    }
+    
+    .bar {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        min-height: 100%;
+        position: relative;
+    }
+    
+    .bar::before {
+        content: '';
+        background: linear-gradient(45deg, #ffd700, #ffed4e);
+        width: 40px;
+        height: var(--height, 50%);
+        border-radius: 4px;
+        margin-bottom: 0.5rem;
+    }
+    
+    .bar span:first-child {
+        font-size: 0.9rem;
+        color: #a0a0a0;
+    }
+    
+    .bar-value {
+        position: absolute;
+        top: -1.5rem;
+        font-weight: bold;
+        color: #ffd700;
+        font-size: 0.9rem;
+    }
+    
+    .chart-placeholder p {
+        padding: 0.5rem 0;
+        color: #e0e0e0;
+        font-size: 1.1rem;
+    }
+    
+    @media (max-width: 768px) {
+        .section-header {
+            flex-direction: column;
+            gap: 1rem;
+            align-items: stretch;
+        }
+        
+        .admin-tabs {
+            flex-wrap: wrap;
+        }
+        
+        .booking-card {
+            flex-direction: column;
+            align-items: stretch;
+            gap: 1rem;
+        }
+        
+        .analytics-grid {
+            grid-template-columns: 1fr;
+        }
+    }
+</style>
+{% endblock %}

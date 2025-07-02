@@ -1,0 +1,251 @@
+{% extends "base.html" %}
+
+{% block title %}Sign Up - MovieMax{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="auth-container">
+        <div class="auth-card">
+            <div class="auth-header">
+                <h1>Join MovieMax</h1>
+                <p>Create your account and start booking</p>
+            </div>
+            
+            <form method="POST" class="auth-form">
+                <div class="form-group">
+                    <label for="name">Full Name</label>
+                    <input type="text" id="name" name="name" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="email">Email Address</label>
+                    <input type="email" id="email" name="email" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="phone">Phone Number</label>
+                    <input type="tel" id="phone" name="phone" placeholder="+91 9876543210" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="password">Password</label>
+                    <input type="password" id="password" name="password" required minlength="6">
+                </div>
+                
+                <div class="form-group">
+                    <label for="confirm_password">Confirm Password</label>
+                    <input type="password" id="confirm_password" name="confirm_password" required minlength="6">
+                </div>
+                
+                <button type="submit" class="btn btn-auth">Create Account</button>
+            </form>
+            
+            <div class="auth-footer">
+                <p>Already have an account? <a href="{{ url_for('login') }}">Sign in here</a></p>
+            </div>
+        </div>
+        
+        <div class="auth-visual">
+            <div class="visual-content">
+                <h2>Start Your Cinema Journey</h2>
+                <div class="benefits">
+                    <div class="benefit">
+                        <span class="benefit-icon">⚡</span>
+                        <div>
+                            <h4>Quick Booking</h4>
+                            <p>Book tickets in under 2 minutes</p>
+                        </div>
+                    </div>
+                    <div class="benefit">
+                        <span class="benefit-icon">🎯</span>
+                        <div>
+                            <h4>Best Seats</h4>
+                            <p>Choose from premium seating options</p>
+                        </div>
+                    </div>
+                    <div class="benefit">
+                        <span class="benefit-icon">💳</span>
+                        <div>
+                            <h4>Secure Payments</h4>
+                            <p>Safe and encrypted transactions</p>
+                        </div>
+                    </div>
+                    <div class="benefit">
+                        <span class="benefit-icon">📱</span>
+                        <div>
+                            <h4>Digital Tickets</h4>
+                            <p>Get instant mobile tickets</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .auth-container {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        min-height: 80vh;
+        gap: 3rem;
+        align-items: center;
+        max-width: 1000px;
+        margin: 0 auto;
+    }
+    
+    .auth-card {
+        background: rgba(255, 255, 255, 0.05);
+        padding: 3rem;
+        border-radius: 16px;
+        border: 1px solid rgba(255, 215, 0, 0.2);
+        backdrop-filter: blur(10px);
+    }
+    
+    .auth-header {
+        text-align: center;
+        margin-bottom: 2rem;
+    }
+    
+    .auth-header h1 {
+        font-size: 2.5rem;
+        color: #ffd700;
+        margin-bottom: 0.5rem;
+    }
+    
+    .auth-header p {
+        color: #a0a0a0;
+        font-size: 1.1rem;
+    }
+    
+    .auth-form {
+        display: flex;
+        flex-direction: column;
+        gap: 1.5rem;
+    }
+    
+    .form-group {
+        display: flex;
+        flex-direction: column;
+        gap: 0.5rem;
+    }
+    
+    .form-group label {
+        color: #e0e0e0;
+        font-weight: 500;
+        font-size: 0.95rem;
+    }
+    
+    .form-group input {
+        padding: 1rem;
+        border: 2px solid rgba(255, 255, 255, 0.2);
+        border-radius: 8px;
+        background: rgba(255, 255, 255, 0.05);
+        color: #ffffff;
+        font-size: 1rem;
+        transition: all 0.3s ease;
+    }
+    
+    .form-group input:focus {
+        outline: none;
+        border-color: #ffd700;
+        background: rgba(255, 255, 255, 0.1);
+    }
+    
+    .btn-auth {
+        width: 100%;
+        padding: 1rem;
+        font-size: 1.1rem;
+        font-weight: bold;
+        margin-top: 1rem;
+    }
+    
+    .auth-footer {
+        text-align: center;
+        margin-top: 2rem;
+        padding-top: 2rem;
+        border-top: 1px solid rgba(255, 255, 255, 0.1);
+    }
+    
+    .auth-footer a {
+        color: #ffd700;
+        text-decoration: none;
+        font-weight: 500;
+    }
+    
+    .auth-footer a:hover {
+        text-decoration: underline;
+    }
+    
+    .auth-visual {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: linear-gradient(135deg, rgba(255, 215, 0, 0.1), rgba(255, 215, 0, 0.05));
+        border-radius: 16px;
+        padding: 3rem;
+        border: 1px solid rgba(255, 215, 0, 0.2);
+    }
+    
+    .visual-content h2 {
+        font-size: 2rem;
+        color: #ffd700;
+        margin-bottom: 2rem;
+        text-align: center;
+    }
+    
+    .benefits {
+        display: flex;
+        flex-direction: column;
+        gap: 1.5rem;
+    }
+    
+    .benefit {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+        padding: 1rem;
+        background: rgba(255, 255, 255, 0.05);
+        border-radius: 8px;
+        border: 1px solid rgba(255, 215, 0, 0.1);
+    }
+    
+    .benefit-icon {
+        font-size: 1.5rem;
+        min-width: 40px;
+        text-align: center;
+    }
+    
+    .benefit h4 {
+        color: #ffd700;
+        margin-bottom: 0.25rem;
+        font-size: 1rem;
+    }
+    
+    .benefit p {
+        color: #a0a0a0;
+        font-size: 0.9rem;
+        margin: 0;
+    }
+    
+    @media (max-width: 768px) {
+        .auth-container {
+            grid-template-columns: 1fr;
+            gap: 2rem;
+        }
+        
+        .auth-card,
+        .auth-visual {
+            padding: 2rem;
+        }
+        
+        .auth-header h1 {
+            font-size: 2rem;
+        }
+        
+        .visual-content h2 {
+            font-size: 1.5rem;
+        }
+    }
+</style>
+{% endblock %}

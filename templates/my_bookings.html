@@ -1,0 +1,457 @@
+{% extends "base.html" %}
+
+{% block title %}My Bookings - MovieMax{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="bookings-header">
+        <h1>My Bookings</h1>
+        <p>Track and manage your movie reservations</p>
+    </div>
+    
+    {% if bookings %}
+        <div class="bookings-grid">
+            {% for booking in bookings %}
+            <div class="booking-card">
+                <div class="booking-header">
+                    <h3>{{ booking.movie_title }}</h3>
+                    <span class="booking-status confirmed">Confirmed</span>
+                </div>
+                
+                <div class="booking-details">
+                    <div class="detail-row">
+                        <span class="detail-label">📅 Date & Time:</span>
+                        <span class="detail-value">{{ booking.showtime }}</span>
+                    </div>
+                    
+                    <div class="detail-row">
+                        <span class="detail-label">💺 Seats:</span>
+                        <span class="detail-value">{{ booking.seats | join(', ') }}</span>
+                    </div>
+                    
+                    <div class="detail-row">
+                        <span class="detail-label">💰 Total Amount:</span>
+                        <span class="detail-value price">₹{{ "%.2f"|format(booking.total_price) }}</span>
+                    </div>
+                    
+                    <div class="detail-row">
+                        <span class="detail-label">🎫 Booking ID:</span>
+                        <span class="detail-value booking-id">{{ booking.booking_id }}</span>
+                    </div>
+                    
+                    <div class="detail-row">
+                        <span class="detail-label">📅 Booked On:</span>
+                        <span class="detail-value">{{ booking.created_at[:10] }}</span>
+                    </div>
+                </div>
+                
+                <div class="booking-actions">
+                    <button class="btn-action" onclick="showTicket('{{ booking.booking_id }}')">
+                        View Ticket
+                    </button>
+                    <button class="btn-action secondary" onclick="downloadTicket('{{ booking.booking_id }}')">
+                        Download
+                    </button>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <div class="empty-state">
+            <div class="empty-icon">🎬</div>
+            <h2>No Bookings Yet</h2>
+            <p>You haven't made any movie bookings yet. Start exploring our latest movies!</p>
+            <a href="{{ url_for('index') }}" class="btn">Browse Movies</a>
+        </div>
+    {% endif %}
+</div>
+
+<!-- Ticket Modal -->
+<div id="ticketModal" class="modal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h2>Digital Ticket</h2>
+            <span class="close" onclick="closeModal()">&times;</span>
+        </div>
+        <div class="modal-body">
+            <div class="ticket">
+                <div class="ticket-header">
+                    <h3 id="ticketMovieTitle">Movie Title</h3>
+                    <div class="qr-code">📱</div>
+                </div>
+                <div class="ticket-details">
+                    <div class="ticket-row">
+                        <span>Date & Time:</span>
+                        <span id="ticketShowtime">-</span>
+                    </div>
+                    <div class="ticket-row">
+                        <span>Seats:</span>
+                        <span id="ticketSeats">-</span>
+                    </div>
+                    <div class="ticket-row">
+                        <span>Booking ID:</span>
+                        <span id="ticketBookingId">-</span>
+                    </div>
+                </div>
+                <div class="ticket-footer">
+                    <p>Show this ticket at the cinema entrance</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    function showTicket(bookingId) {
+        // In a real app, you'd fetch the booking details
+        // For now, we'll use the data from the page
+        const bookingCards = document.querySelectorAll('.booking-card');
+        let bookingData = null;
+        
+        bookingCards.forEach(card => {
+            const cardBookingId = card.querySelector('.booking-id').textContent;
+            if (cardBookingId === bookingId) {
+                bookingData = {
+                    movieTitle: card.querySelector('h3').textContent,
+                    showtime: card.querySelectorAll('.detail-value')[0].textContent,
+                    seats: card.querySelectorAll('.detail-value')[1].textContent,
+                    bookingId: bookingId
+                };
+            }
+        });
+        
+        if (bookingData) {
+            document.getElementById('ticketMovieTitle').textContent = bookingData.movieTitle;
+            document.getElementById('ticketShowtime').textContent = bookingData.showtime;
+            document.getElementById('ticketSeats').textContent = bookingData.seats;
+            document.getElementById('ticketBookingId').textContent = bookingData.bookingId;
+            
+            document.getElementById('ticketModal').style.display = 'block';
+        }
+    }
+    
+    function closeModal() {
+        document.getElementById('ticketModal').style.display = 'none';
+    }
+    
+    function downloadTicket(bookingId) {
+        // In a real app, this would generate and download a PDF ticket
+        alert('Ticket download feature would be implemented here');
+    }
+    
+    // Close modal when clicking outside
+    window.onclick = function(event) {
+        const modal = document.getElementById('ticketModal');
+        if (event.target === modal) {
+            modal.style.display = 'none';
+        }
+    }
+</script>
+
+<style>
+    .bookings-header {
+        text-align: center;
+        margin-bottom: 3rem;
+    }
+    
+    .bookings-header h1 {
+        font-size: 2.5rem;
+        color: #ffd700;
+        margin-bottom: 0.5rem;
+    }
+    
+    .bookings-header p {
+        color: #a0a0a0;
+        font-size: 1.1rem;
+    }
+    
+    .bookings-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
+        gap: 2rem;
+    }
+    
+    .booking-card {
+        background: rgba(255, 255, 255, 0.05);
+        border-radius: 12px;
+        padding: 2rem;
+        border: 1px solid rgba(255, 215, 0, 0.2);
+        transition: all 0.3s ease;
+    }
+    
+    .booking-card:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 12px 30px rgba(0, 0, 0, 0.3);
+        border-color: rgba(255, 215, 0, 0.4);
+    }
+    
+    .booking-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 1.5rem;
+        padding-bottom: 1rem;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    }
+    
+    .booking-header h3 {
+        color: #ffffff;
+        font-size: 1.3rem;
+        margin: 0;
+    }
+    
+    .booking-status {
+        padding: 0.4rem 1rem;
+        border-radius: 20px;
+        font-size: 0.9rem;
+        font-weight: 600;
+    }
+    
+    .booking-status.confirmed {
+        background: rgba(34, 197, 94, 0.2);
+        color: #86efac;
+        border: 1px solid rgba(34, 197, 94, 0.3);
+    }
+    
+    .booking-details {
+        margin-bottom: 2rem;
+    }
+    
+    .detail-row {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 0.75rem 0;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    }
+    
+    .detail-row:last-child {
+        border-bottom: none;
+    }
+    
+    .detail-label {
+        color: #a0a0a0;
+        font-size: 0.95rem;
+    }
+    
+    .detail-value {
+        color: #ffffff;
+        font-weight: 500;
+    }
+    
+    .detail-value.price {
+        color: #ffd700;
+        font-weight: bold;
+        font-size: 1.1rem;
+    }
+    
+    .detail-value.booking-id {
+        font-family: monospace;
+        font-size: 0.9rem;
+        background: rgba(255, 215, 0, 0.1);
+        padding: 0.2rem 0.5rem;
+        border-radius: 4px;
+    }
+    
+    .booking-actions {
+        display: flex;
+        gap: 1rem;
+    }
+    
+    .btn-action {
+        flex: 1;
+        padding: 0.75rem;
+        background: linear-gradient(45deg, #ffd700, #ffed4e);
+        color: #1a1a2e;
+        border: none;
+        border-radius: 8px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s ease;
+    }
+    
+    .btn-action:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 20px rgba(255, 215, 0, 0.3);
+    }
+    
+    .btn-action.secondary {
+        background: transparent;
+        color: #ffd700;
+        border: 2px solid #ffd700;
+    }
+    
+    .btn-action.secondary:hover {
+        background: #ffd700;
+        color: #1a1a2e;
+    }
+    
+    .empty-state {
+        text-align: center;
+        padding: 4rem 2rem;
+        background: rgba(255, 255, 255, 0.05);
+        border-radius: 16px;
+        border: 1px solid rgba(255, 215, 0, 0.2);
+    }
+    
+    .empty-icon {
+        font-size: 4rem;
+        margin-bottom: 1rem;
+    }
+    
+    .empty-state h2 {
+        color: #ffd700;
+        font-size: 2rem;
+        margin-bottom: 1rem;
+    }
+    
+    .empty-state p {
+        color: #a0a0a0;
+        font-size: 1.1rem;
+        margin-bottom: 2rem;
+    }
+    
+    /* Modal Styles */
+    .modal {
+        display: none;
+        position: fixed;
+        z-index: 2000;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.8);
+        backdrop-filter: blur(5px);
+    }
+    
+    .modal-content {
+        background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+        margin: 5% auto;
+        padding: 0;
+        border-radius: 16px;
+        width: 90%;
+        max-width: 500px;
+        border: 1px solid rgba(255, 215, 0, 0.3);
+    }
+    
+    .modal-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 1.5rem 2rem;
+        border-bottom: 1px solid rgba(255, 215, 0, 0.2);
+    }
+    
+    .modal-header h2 {
+        color: #ffd700;
+        margin: 0;
+    }
+    
+    .close {
+        color: #a0a0a0;
+        font-size: 2rem;
+        font-weight: bold;
+        cursor: pointer;
+        transition: color 0.3s ease;
+    }
+    
+    .close:hover {
+        color: #ffd700;
+    }
+    
+    .modal-body {
+        padding: 2rem;
+    }
+    
+    .ticket {
+        background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%);
+        color: #1a1a2e;
+        border-radius: 12px;
+        padding: 2rem;
+        border: 2px dashed #ffd700;
+    }
+    
+    .ticket-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 1.5rem;
+        padding-bottom: 1rem;
+        border-bottom: 2px dashed #ddd;
+    }
+    
+    .ticket-header h3 {
+        color: #1a1a2e;
+        font-size: 1.3rem;
+        margin: 0;
+    }
+    
+    .qr-code {
+        font-size: 2rem;
+        background: #1a1a2e;
+        color: #ffffff;
+        padding: 0.5rem;
+        border-radius: 8px;
+    }
+    
+    .ticket-details {
+        margin-bottom: 1.5rem;
+    }
+    
+    .ticket-row {
+        display: flex;
+        justify-content: space-between;
+        padding: 0.5rem 0;
+        border-bottom: 1px solid #eee;
+    }
+    
+    .ticket-row:last-child {
+        border-bottom: none;
+    }
+    
+    .ticket-row span:first-child {
+        font-weight: 600;
+        color: #666;
+    }
+    
+    .ticket-row span:last-child {
+        font-weight: 500;
+        color: #1a1a2e;
+    }
+    
+    .ticket-footer {
+        text-align: center;
+        padding-top: 1rem;
+        border-top: 2px dashed #ddd;
+    }
+    
+    .ticket-footer p {
+        color: #666;
+        font-size: 0.9rem;
+        margin: 0;
+    }
+    
+    @media (max-width: 768px) {
+        .bookings-grid {
+            grid-template-columns: 1fr;
+        }
+        
+        .booking-actions {
+            flex-direction: column;
+        }
+        
+        .modal-content {
+            width: 95%;
+            margin: 10% auto;
+        }
+        
+        .modal-body {
+            padding: 1rem;
+        }
+        
+        .ticket {
+            padding: 1.5rem;
+        }
+    }
+</style>
+{% endblock %}

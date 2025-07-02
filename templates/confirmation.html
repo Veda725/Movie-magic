@@ -1,0 +1,157 @@
+{% extends "base.html" %}
+
+{% block title %}Booking Confirmed - MovieMax{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="confirmation-container">
+        <div class="success-icon">✅</div>
+        <h1>Booking Confirmed!</h1>
+        <p class="confirmation-message">Your movie tickets have been successfully booked.</p>
+        
+        <div class="booking-id">
+            <h3>Booking ID</h3>
+            <p class="booking-reference">{{ booking_id }}</p>
+            <small>Please save this reference number for your records</small>
+        </div>
+        
+        <div class="confirmation-details">
+            <h3>What's Next?</h3>
+            <ul>
+                <li>📱 You'll receive an SMS confirmation shortly</li>
+                <li>🎫 Show this booking ID at the cinema</li>
+                <li>🍿 Arrive 15 minutes before showtime</li>
+                <li>📧 Check your email for detailed ticket information</li>
+            </ul>
+        </div>
+        
+        <div class="action-buttons">
+            <a href="{{ url_for('index') }}" class="btn">Book Another Movie</a>
+            <button onclick="window.print()" class="btn btn-secondary">Print Confirmation</button>
+        </div>
+    </div>
+</div>
+
+<style>
+    .confirmation-container {
+        max-width: 600px;
+        margin: 2rem auto;
+        text-align: center;
+        background: rgba(255, 255, 255, 0.05);
+        padding: 3rem;
+        border-radius: 16px;
+        border: 1px solid rgba(255, 215, 0, 0.2);
+    }
+    
+    .success-icon {
+        font-size: 4rem;
+        margin-bottom: 1rem;
+    }
+    
+    .confirmation-container h1 {
+        font-size: 2.5rem;
+        color: #ffd700;
+        margin-bottom: 1rem;
+    }
+    
+    .confirmation-message {
+        font-size: 1.2rem;
+        color: #e0e0e0;
+        margin-bottom: 2rem;
+    }
+    
+    .booking-id {
+        background: rgba(255, 215, 0, 0.1);
+        padding: 2rem;
+        border-radius: 12px;
+        margin: 2rem 0;
+        border: 2px solid rgba(255, 215, 0, 0.3);
+    }
+    
+    .booking-id h3 {
+        color: #ffd700;
+        margin-bottom: 1rem;
+    }
+    
+    .booking-reference {
+        font-size: 1.5rem;
+        font-weight: bold;
+        color: #ffffff;
+        background: rgba(0, 0, 0, 0.3);
+        padding: 0.75rem;
+        border-radius: 8px;
+        letter-spacing: 2px;
+        margin-bottom: 0.5rem;
+    }
+    
+    .booking-id small {
+        color: #a0a0a0;
+        font-size: 0.9rem;
+    }
+    
+    .confirmation-details {
+        margin: 2rem 0;
+        text-align: left;
+    }
+    
+    .confirmation-details h3 {
+        color: #ffd700;
+        margin-bottom: 1rem;
+        text-align: center;
+    }
+    
+    .confirmation-details ul {
+        list-style: none;
+        padding: 0;
+    }
+    
+    .confirmation-details li {
+        padding: 0.75rem 0;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        font-size: 1.1rem;
+    }
+    
+    .confirmation-details li:last-child {
+        border-bottom: none;
+    }
+    
+    .action-buttons {
+        display: flex;
+        gap: 1rem;
+        justify-content: center;
+        margin-top: 2rem;
+    }
+    
+    @media (max-width: 768px) {
+        .confirmation-container {
+            margin: 1rem;
+            padding: 2rem 1rem;
+        }
+        
+        .confirmation-container h1 {
+            font-size: 2rem;
+        }
+        
+        .action-buttons {
+            flex-direction: column;
+        }
+    }
+    
+    @media print {
+        body {
+            background: white;
+            color: black;
+        }
+        
+        .navbar, .footer {
+            display: none;
+        }
+        
+        .confirmation-container {
+            background: white;
+            border: 2px solid #000;
+            box-shadow: none;
+        }
+    }
+</style>
+{% endblock %}
